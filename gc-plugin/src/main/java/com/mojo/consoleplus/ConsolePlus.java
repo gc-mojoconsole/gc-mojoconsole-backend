@@ -26,7 +26,7 @@ public class ConsolePlus extends Plugin{
     @Override
     public void onDisable() {
         CommandMap.getInstance().unregisterCommand("mojoconsole");
-        Grasscutter.getLogger().info("[GCGM] GCGM Disabled");
+        Grasscutter.getLogger().info("[MCP] MCP Disabled");
     }
 
 }

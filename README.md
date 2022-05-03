@@ -1,12 +1,12 @@
 # MojoConsolePlus
 
-MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscutter) plugin (Apart from Ben4j's GCGM plugin) and it's goal is to implement fully in-game webwiew based .
+MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscutter) plugin (Apart from 4Benj's GCGM plugin) and it's goal is to implement fully in-game webwiew based .
 
 ## Currently Features: 
 - [x] Send console link in game
 - [x] Do what players can do in the in-game chat based console
     - [x] Inherit the original permission system
-    - [ ] Capture command response to plugin instead of send chat to player
+    - [x] Capture command response to plugin instead of send chat to player
 - [ ] More configurable
 
 ## Important Notes:
@@ -64,7 +64,42 @@ Request: `Content-Type: application/json`
     }
 ```
 
-Resources: You can use the following function to send the request, just plug it after you finished the command generation job.
-```javascript
-
+Response: `Content-Type: application/json`
+```json
+    {
+        "message": "success", // message saying the execution status,
+        "code": 200, // could be 200 - success, 403 - SessionKey invalid, 500 - Command execution error (should from command), 400 - request not supported
+        "payload": "response for the command", // example: got "All characters have been healed." when invoking with "heal"
+    }
 ```
+## Resources
+
+You can use the following function to send the request, just plug it after you finished the command generation job. `payload` is the command you wish to send.
+
+```javascript
+function sendCommand(payload){
+                var client = new XMLHttpRequest();
+                var key = new window.URLSearchParams(window.location.search).get("k");
+                var url = '/mojoplus/api';
+                client.open("POST", url, true);
+                client.setRequestHeader("Content-Type", "application/json");
+                client.onreadystatechange = function () {
+                if (client.readyState === 4 && client.status === 200) {
+                    var result = document.getElementById("c2");
+                    // Print received data from server
+                    result.innerHTML = JSON.parse(this.responseText).payload.replace(/\n/g, "<p/>");
+                }
+                };
+ 
+                // Converting JSON data to string
+                var data = JSON.stringify({ "k": key, "request": "invoke", "payload": payload });
+                // Sending data with the request
+                client.send(data);
+            }
+```
+
+### Frontend
+
+By SpikeHD: https://github.com/SpikeHD/MojoFrontend (under development)
+
+...You can develop your own frontend and make PR to put yours here...
