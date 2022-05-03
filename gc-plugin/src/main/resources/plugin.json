@@ -1,0 +1,8 @@
+{
+  "name": "mojoconsole-plus",
+  "description": "Grasscutter In Game Web Based Console",
+  "version": "dev-1.0.0",
+  
+  "mainClass": "com.mojo.consoleplus.ConsolePlus",
+  "authors": ["mingjun97"]
+}
