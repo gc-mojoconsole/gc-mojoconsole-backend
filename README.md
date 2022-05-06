@@ -31,23 +31,24 @@ See realeases.
 5. Navigate to your ``Grasscutter`` server, find the ``plugins`` folder and paste the ``mojoconsole.jar`` into it. 
 6. Start your server.
 
-7. Put the all the frontend files into the folder `GRASSCUTTER_RESOURCE/gcstatic/mojo/console.html`.
+...Jump to next section...
 
-8. Send command `/mojoconsole` or `/mojo` to server in game, and you will receive mail in your mailbox. Then follow the instructions there.
+### Usage
+
+7. Put the all the frontend files into the folder `GRASSCUTTER_RESOURCE/plugins/mojoconsole/`. Note that your must have `console.html` for now. You are free to put any other dynamiclly loaded file(e.g. `.js`, `.css`) in that folder. Check the last section for current avialable frontend.
+
+8. Send command `/mojoconsole` or `/mojo` to server in game, and you will receive mail in your mailbox. Then follow the instructions there. Note that you may use `o` option to use the pop out browser instead of in-game webwiew, e.g. `/mojo o`. By default, the console is in-game webview.
 
 Your final plugins folder's directory structure should look similar to this
 ```
 plugins
 │   mojoconsole.jar
 │   ...
-resources
-└───gcstatic
-    │   ...
-    └───mojo
-        │   console.html
-        |   ...
-        └───any other file that you want to include in your frontend
-            │   ...
+└───mojoconsole
+    │   console.html
+    |   ...
+    └───any other file that you want to include in your frontend
+        │   ...
 ```
 
 
@@ -78,24 +79,24 @@ You can use the following function to send the request, just plug it after you f
 
 ```javascript
 function sendCommand(payload){
-                var client = new XMLHttpRequest();
-                var key = new window.URLSearchParams(window.location.search).get("k");
-                var url = '/mojoplus/api';
-                client.open("POST", url, true);
-                client.setRequestHeader("Content-Type", "application/json");
-                client.onreadystatechange = function () {
-                if (client.readyState === 4 && client.status === 200) {
-                    var result = document.getElementById("c2");
-                    // Print received data from server
-                    result.innerHTML = JSON.parse(this.responseText).payload.replace(/\n/g, "<p/>");
-                }
-                };
- 
-                // Converting JSON data to string
-                var data = JSON.stringify({ "k": key, "request": "invoke", "payload": payload });
-                // Sending data with the request
-                client.send(data);
-            }
+    var client = new XMLHttpRequest();
+    var key = new window.URLSearchParams(window.location.search).get("k");
+    var url = '/mojoplus/api';
+    client.open("POST", url, true);
+    client.setRequestHeader("Content-Type", "application/json");
+    client.onreadystatechange = function () {
+        if (client.readyState === 4 && client.status === 200) {
+            var result = document.getElementById("c2");
+            // Print received data from server
+            result.innerHTML = JSON.parse(this.responseText).payload.replace(/\n/g, "<p/>");
+        }
+    };
+
+    // Converting JSON data to string
+    var data = JSON.stringify({ "k": key, "request": "invoke", "payload": payload });
+    // Sending data with the request
+    client.send(data);
+}
 ```
 
 ### Frontend

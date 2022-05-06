@@ -8,18 +8,25 @@ import emu.grasscutter.command.CommandHandler;
 import emu.grasscutter.game.mail.Mail;
 import emu.grasscutter.game.player.Player;
 
-@Command(label = "mojoconsole", usage = "mojoconsole", description = "Generate Mojoconsole link (no arguments required)", aliases = {
+@Command(label = "mojoconsole", usage = "mojoconsole", description = "Send Mojoconsole link via mail (by default it's in-game webview, but you may use argument `o` for popping out external browser)", aliases = {
         "mojo" }, permission = "mojo.console")
 public class PluginCommand implements CommandHandler {
     @Override
-    public void execute(Player sender, List<String> args) {
+    public void execute(Player sender, Player targetPlayer, List<String> args) {
         Mail mail = new Mail();
-        String link = getServerURL(sender.getAccount().getSessionKey());
+        String link = getServerURL(targetPlayer.getAccount().getSessionKey());
+        String link_type = "webview";
         Grasscutter.getLogger().info(link);
+        if (args.size() > 0 && args.get(0).equals("o")) {
+            link_type = "browser";
+        }
+
+        mail.mailContent.title = "MojoConsole";
+        mail.mailContent.sender = "MojoConsolePlus";
         mail.mailContent.content = "Here is your mojo console link: " +
-                "<type=\"webview\" text=\"Mojo Console\" href=\"" + link + "\"/>" +
+                "<type=\""+ link_type + "\" text=\"Mojo Console\" href=\"" + link + "\"/>" +
                 "Note that the link will <b>expire</b> in some time, you may retrieve a new one after that.";
-        sender.sendMail(mail);
+        targetPlayer.sendMail(mail);
         CommandHandler.sendMessage(sender, "[MojoConsole] Link sent, check your mailbox");
     }
 
@@ -32,6 +39,6 @@ public class PluginCommand implements CommandHandler {
                 ":"
                 + (Grasscutter.getConfig().getDispatchOptions().PublicPort != 0
                         ? Grasscutter.getConfig().getDispatchOptions().PublicPort
-                        : Grasscutter.getConfig().getDispatchOptions().Port) + "/gcstatic/mojo/console.html?k=" + sessionKey;
+                        : Grasscutter.getConfig().getDispatchOptions().Port) + "/mojoplus/console.html?k=" + sessionKey;
     }
 }

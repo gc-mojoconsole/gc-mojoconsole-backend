@@ -44,7 +44,8 @@ public final class RequestHandler implements HttpContextHandler {
                     switch (request.request){
                         case "invoke":
                             try{
-                                CommandMap.getInstance().invoke(player, request.payload);
+                                // TODO: Enable execut commands to third party
+                                CommandMap.getInstance().invoke(player, player, request.payload);
                             } catch (Exception e) {
                                 res.json(new ResponseJson("error", 500, e.getStackTrace().toString()));
                                 break;
