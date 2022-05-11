@@ -7,6 +7,7 @@ import emu.grasscutter.command.Command;
 import emu.grasscutter.command.CommandHandler;
 import emu.grasscutter.game.mail.Mail;
 import emu.grasscutter.game.player.Player;
+import static emu.grasscutter.Configuration.*;
 
 @Command(label = "mojoconsole", usage = "mojoconsole", description = "Send Mojoconsole link via mail (by default it's in-game webview, but you may use argument `o` for popping out external browser)", aliases = {
         "mojo" }, permission = "mojo.console")
@@ -31,14 +32,8 @@ public class PluginCommand implements CommandHandler {
     }
 
     private static String getServerURL(String sessionKey) {
-        return "http" + (Grasscutter.getConfig().getDispatchOptions().FrontHTTPS ? "s" : "") + "://" +
-                (Grasscutter.getConfig().getDispatchOptions().PublicIp.isEmpty()
-                        ? Grasscutter.getConfig().getDispatchOptions().Ip
-                        : Grasscutter.getConfig().getDispatchOptions().PublicIp)
-                +
-                ":"
-                + (Grasscutter.getConfig().getDispatchOptions().PublicPort != 0
-                        ? Grasscutter.getConfig().getDispatchOptions().PublicPort
-                        : Grasscutter.getConfig().getDispatchOptions().Port) + "/mojoplus/console.html?k=" + sessionKey;
+        return "http" + (DISPATCH_ENCRYPTION.useEncryption ? "s" : "") + "://"
+        + lr(DISPATCH_INFO.accessAddress, DISPATCH_INFO.bindAddress) + ":"
+        + lr(DISPATCH_INFO.accessPort, DISPATCH_INFO.bindPort) + "/mojoplus/console.html?k=" + sessionKey;
     }
 }
