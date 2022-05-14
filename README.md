@@ -1,5 +1,7 @@
 # MojoConsolePlus
 
+EN|[中文](./README-zh.md)
+
 MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscutter) plugin (Apart from 4Benj's GCGM plugin) and it's goal is to implement fully in-game webwiew based .
 
 ## Currently Features: 
@@ -7,7 +9,8 @@ MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscut
 - [x] Do what players can do in the in-game chat based console
     - [x] Inherit the original permission system
     - [x] Capture command response to plugin instead of send chat to player
-- [ ] More configurable
+- [x] More configurable
+- [x] Use external CDN
 
 ## Important Notes:
 This plugin is made to run on the current [Development](https://github.com/Grasscutters/Grasscutter/tree/development) branch of Grasscutter. \
@@ -25,7 +28,7 @@ See realeases.
 
 ### Compile yourself
 1. Pull the latest code from github using ``git clone https://github.com/mingjun97/gc-mojoconsole-plus`` in your terminal of choice.
-2. Locate your grasscutter server and copy the ``grasscutter`` server jar into the newly created ``gcgm-plugin/gc-plugin/lib`` folder
+2. Locate your grasscutter server and copy the ``grasscutter`` server jar into the newly created ``gc-mojoconsole-backend/gc-plugin/lib`` folder
 3. Navigate back into the project root folder called ``gc-mojoconsole-plus`` folder and run ``gradlew build`` (cmd) **or** ``./gradlew build`` (Powershell, Linux & Mac).
 4. Assuming the build succeeded, in your file explorer navigate to the ``gc-plugin`` folder, you should have a ``mojoconsole.jar`` file, copy it.
 5. Navigate to your ``Grasscutter`` server, find the ``plugins`` folder and paste the ``mojoconsole.jar`` into it. 
@@ -35,20 +38,37 @@ See realeases.
 
 ### Usage
 
-7. Put the all the frontend files into the folder `GRASSCUTTER_RESOURCE/plugins/mojoconsole/`. Note that your must have `console.html` for now. You are free to put any other dynamiclly loaded file(e.g. `.js`, `.css`) in that folder. Check the last section for current avialable frontend.
+You have two options for hosting frontend.
+
+#### Use CDN hosted frontend(Recommended)
+
+7. Pull the file `mojoconfig.json` into your `plugins` folder, set the `useCDN` to `true`. Alternatively, you can launch the grasscutter first, then the `mojoconfig.json` will be auto generated.
+8. Modify the `config.json` of Grasscutter, make sure the `cors` is enabled. It's required in CDN mode.  See `config.json`->`server`->`policies`->`cors`.
+
+CDN serving frontend is hosted by us via the github pages. The credentials will be passed via the hash paramets, which means the credentials(i.e. User session key, access address for your grasscutter server) will not be passed through the network. We will update our CDN frontend regularly, so that you don't have to handle the frontend update by yourself and always enjoy the latest version. Enabling `CORS` will not put your grasscutter in dangerous. It's just for protecting users accessed on browser from potential information leakage in some rare circumstances, and grasscutter actually don't have this concern.
+
+#### Self hosted frontend
+7. Put the all the frontend files into the folder `GRASSCUTTER_ROOT/plugins/mojoconsole/`. Note that your must have `console.html` for now. You are free to put any other dynamiclly loaded file(e.g. `.js`, `.css`) in that folder. Check the last section for current avialable frontend.
+
+#### Commands for mojo
 
 8. Send command `/mojoconsole` or `/mojo` to server in game, and you will receive mail in your mailbox. Then follow the instructions there. Note that you may use `o` option to use the pop out browser instead of in-game webwiew, e.g. `/mojo o`. By default, the console is in-game webview.
 
 Your final plugins folder's directory structure should look similar to this
 ```
-plugins
-│   mojoconsole.jar
-│   ...
-└───mojoconsole
-    │   console.html
-    |   ...
-    └───any other file that you want to include in your frontend
-        │   ...
+GRASSCUTTER_ROOT
+|   grasscutter.jar
+|   resources
+|   data
+|   ...
+└───plugins
+    │   mojoconsole.jar
+    │   ...
+    └───mojoconsole
+        │   console.html
+        |   ...
+        └───any other file that you want to include in your frontend
+            │   ...
 ```
 
 
@@ -102,5 +122,6 @@ function sendCommand(payload){
 ### Frontend
 
 By SpikeHD: https://github.com/SpikeHD/MojoFrontend (under development)
+CDN hosted frontend：https://github.com/gc-mojoconsole/gc-mojoconsole.github.io
 
 ...You can develop your own frontend and make PR to put yours here...
