@@ -55,8 +55,8 @@ public class PluginCommand implements CommandHandler {
     }
 
     private static String getMojoBackendURL() {
-        return "http" + (DISPATCH_ENCRYPTION.useEncryption ? "s" : "") + "://"
-        + lr(DISPATCH_INFO.accessAddress, DISPATCH_INFO.bindAddress) + ":"
-        + lr(DISPATCH_INFO.accessPort, DISPATCH_INFO.bindPort);
+        return "http" + (HTTP_ENCRYPTION.useEncryption ? "s" : "") + "://"
+        + lr(HTTP_INFO.accessAddress, HTTP_INFO.bindAddress) + ":"
+        + lr(HTTP_INFO.accessPort, HTTP_INFO.bindPort);
     }
 }

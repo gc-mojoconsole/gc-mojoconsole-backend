@@ -10,9 +10,13 @@ import emu.grasscutter.game.Account;
 import emu.grasscutter.game.player.Player;
 import emu.grasscutter.utils.FileUtils;
 import emu.grasscutter.utils.MessageHandler;
-import express.http.HttpContextHandler;
 import express.http.Request;
 import express.http.Response;
+import express.Express;
+
+import emu.grasscutter.server.http.Router;
+import io.javalin.Javalin;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,10 +24,15 @@ import com.mojo.consoleplus.forms.RequestJson;
 import com.mojo.consoleplus.forms.ResponseJson;
 
 
-public final class RequestHandler implements HttpContextHandler {
+public final class RequestHandler implements Router {
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    @Override
-	public void handle(Request req, Response res) throws IOException {
+
+    @Override public void applyRoutes(Express app, Javalin handle) {
+        app.post("/mojoplus/api", RequestHandler::processRequest);
+    }
+
+
+	public static void processRequest(Request req, Response res) throws IOException {
         RequestJson request = req.body(RequestJson.class);
         res.type("application/json");
         if (request.k != null) {
