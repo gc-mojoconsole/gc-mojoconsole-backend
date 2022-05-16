@@ -9,7 +9,7 @@ import java.io.File;
 import com.mojo.consoleplus.command.PluginCommand;
 
 import io.javalin.http.staticfiles.Location;
-import static emu.grasscutter.Configuration.PLUGINS_FOLDER;
+import static emu.grasscutter.Configuration.PLUGIN;
 import static emu.grasscutter.Configuration.HTTP_POLICIES;
 
 import com.mojo.consoleplus.config.MojoConfig;
@@ -24,7 +24,7 @@ public class ConsolePlus extends Plugin{
 
     @Override
     public void onEnable() {
-        String folder_name = PLUGINS_FOLDER + "/mojoconsole/";
+        String folder_name = PLUGIN("mojoconsole/");
         File folder = new File(folder_name);
         if (!folder.exists()) {
             Grasscutter.getLogger().warn("To make mojo console works, you have to put your frontend file(console.html) inside" + folder.getAbsolutePath());
