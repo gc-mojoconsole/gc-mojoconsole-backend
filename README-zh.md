@@ -81,7 +81,8 @@ URL: `/mojoplus/api`
 Request: `Content-Type: application/json`
 ```json
     {
-        "k": "SESSION_KEY", // sesssion key is embedded in the mail, can be retreved via the GET params.
+        "k": "SESSION_KEY", // **DEPRECATED** sesssion key is embedded in the mail, can be retreved via the GET params.
+        "k2": "AUTH_KEY",   // auth key, this is the second version auth key, choose either `k` or `k2`
         "request": "invoke", // set request to ping will ignore the payload, which just check the aliveness of current sessionKey 
         "payload": "command just like what you do in your in game chat console" // example: "heal" for heal all avatars
     }
@@ -95,6 +96,31 @@ Response: `Content-Type: application/json`
         "payload": "response for the command", // example: got "All characters have been healed." when invoking with "heal"
     }
 ```
+
+
+URL: `/mojoplus/auth` Request a auth key for player
+
+Request: `Content-Type: application/json`
+```json
+    {
+        "uid": "UID", // player uid to be requested
+        "otp": "OTP", // **OPTIONAL**, use the OTP returned from previous `auth` request to check the status of the ticket.
+    }
+```
+
+Response: `Content-Type: application/json`
+```json
+    {
+        "message": "success", // message saying the execution status,
+        "code": 200, // could be 200 - success, check content in `key` field,
+                     // 404 - Player not found or offline
+                     // 201 - Not ready yet, player has not confirmed yet
+                     // 400 - request not supported
+        "key": "OTP or AUTH_KEY", // with `otp` field: AUTH_KEY for that player
+                                  // without `otp` field: `OTP` for further request
+    }
+```
+
 ## 其他资源
 
 You can use the following function to send the request, just plug it after you finished the command generation job. `payload` is the command you wish to send.
