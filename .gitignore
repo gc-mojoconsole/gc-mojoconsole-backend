@@ -11,3 +11,5 @@ build
 
 # Ignore lib
 gc-plugin/lib/
+
+gc-plugin/src/main/resources/plugin.json
