@@ -6,6 +6,13 @@ on:
       - "**.java"
     branches:
       - "main"
+  pull_request:
+    paths:
+      - "**.java"
+    types:
+      - opened
+      - synchronize
+      - reopened
 jobs:
   Build-Server-Jar:
     runs-on: ubuntu-latest
@@ -40,10 +47,10 @@ jobs:
       - name: Automatic create a pre-relase
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: "marvinpinto/action-automatic-releases@latest"
-              with:
-                repo_token: "${{ secrets.GITHUB_TOKEN }}"
-                automatic_release_tag: "latest"
-                prerelease: true
-                title: "Development Build"
-                files: |
-                  gc-plugin/mojoconsole.jar
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            gc-plugin/mojoconsole.jar
