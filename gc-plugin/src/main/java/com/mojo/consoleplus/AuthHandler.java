@@ -1,7 +1,6 @@
 package com.mojo.consoleplus;
 import java.security.MessageDigest;
 import java.util.UUID;
-import com.mojo.consoleplus.ConsolePlus;
 
 public class AuthHandler {
     public static String signatureStub;
