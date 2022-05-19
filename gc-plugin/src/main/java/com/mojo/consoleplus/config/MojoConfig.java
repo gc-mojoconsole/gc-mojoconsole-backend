@@ -33,7 +33,6 @@ public class MojoConfig {
         try{
             String result = new File(MojoConfig.class.getProtectionDomain().getCodeSource().getLocation()
             .toURI()).getParent() + "/mojoconfig.json";
-            System.out.println("Mojoconfig file: "+ result);
             return result;
         } catch (Exception e){
             e.printStackTrace();
