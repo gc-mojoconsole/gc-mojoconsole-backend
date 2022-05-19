@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import emu.grasscutter.Grasscutter;
 import emu.grasscutter.command.Command;
 import emu.grasscutter.command.CommandHandler;
 import emu.grasscutter.game.mail.Mail;
@@ -75,8 +74,8 @@ public class PluginCommand implements CommandHandler {
                         sender = resolved.sender;
                         targetPlayer = resolved.targetPlayer;
                         valid = true;
+                        CommandHandler.sendMessage(targetPlayer, ConsolePlus.config.responseMessageSuccess);
                         if (resolved.api == false) {
-                            CommandHandler.sendMessage(targetPlayer, ConsolePlus.config.responseMessageSuccess);
                             tickets.remove(otp);
                         }
                     }
@@ -140,5 +139,9 @@ public class PluginCommand implements CommandHandler {
                 tickets.remove(otp);
             }
         }
+    }
+
+    public static PluginCommand getInstance() {
+        return instance;
     }
 }
