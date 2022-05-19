@@ -1,12 +1,8 @@
 package com.mojo.consoleplus.config;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

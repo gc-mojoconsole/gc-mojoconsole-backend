@@ -8,7 +8,6 @@ import emu.grasscutter.command.CommandMap;
 import emu.grasscutter.database.DatabaseHelper;
 import emu.grasscutter.game.Account;
 import emu.grasscutter.game.player.Player;
-import emu.grasscutter.utils.FileUtils;
 import emu.grasscutter.utils.MessageHandler;
 import express.http.Request;
 import express.http.Response;
@@ -18,14 +17,14 @@ import emu.grasscutter.server.http.Router;
 import io.javalin.Javalin;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+// import com.google.gson.Gson;
+// import com.google.gson.GsonBuilder;
 import com.mojo.consoleplus.forms.RequestJson;
 import com.mojo.consoleplus.forms.ResponseJson;
 
 
 public final class RequestHandler implements Router {
-	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	// private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Override public void applyRoutes(Express app, Javalin handle) {
         app.post("/mojoplus/api", RequestHandler::processRequest);
@@ -39,7 +38,7 @@ public final class RequestHandler implements Router {
             Account account = DatabaseHelper.getAccountBySessionKey(request.k);
             Map<Integer, Player> playersMap = Grasscutter.getGameServer().getPlayers();
             Player player = null;
-            String invokeResult = "";
+            // String invokeResult = "";
             MessageHandler resultCollector = new MessageHandler();
             if (account != null) {
                 for (int playerid: playersMap.keySet()) {
@@ -73,8 +72,5 @@ public final class RequestHandler implements Router {
             }
         }
         res.json(new ResponseJson("403 Forbidden", 403));
-        // String sessionKey = req.formData("k");
-        // String request = req.formData("request");
-        // String payload = req.formData("payload");
     }
 }
