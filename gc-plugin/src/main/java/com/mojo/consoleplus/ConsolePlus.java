@@ -4,11 +4,16 @@ import emu.grasscutter.Grasscutter;
 import emu.grasscutter.command.CommandMap;
 import emu.grasscutter.plugin.Plugin;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
+import com.google.gson.Gson;
 import com.mojo.consoleplus.command.PluginCommand;
 
 import io.javalin.http.staticfiles.Location;
+import emu.grasscutter.plugin.PluginConfig;
 import static emu.grasscutter.Configuration.PLUGIN;
 import static emu.grasscutter.Configuration.HTTP_POLICIES;
 
@@ -16,11 +21,23 @@ import com.mojo.consoleplus.config.MojoConfig;
 
 public class ConsolePlus extends Plugin{
     public static MojoConfig config = MojoConfig.loadConfig();
+    public static String versionTag;
 
     @Override
     public void onLoad() {
-        Grasscutter.getLogger().info("[MojoConsole] loaded!");
+        try (InputStream in = getClass().getResourceAsStream("/plugin.json");
+           BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+            Gson gson = new Gson();
+            PluginConfig pluginConfig = gson.fromJson(reader, PluginConfig.class);
+            this.getLogger().info("[MojoConsole] loaded!");
+            versionTag = pluginConfig.version;
+        }
+           catch (Exception e) {
+               e.printStackTrace();
+           }
+    // Use resource
     }
+
 
     @Override
     public void onEnable() {
@@ -40,14 +57,14 @@ public class ConsolePlus extends Plugin{
         }
         Grasscutter.getHttpServer().addRouter(RequestHandler.class);
         CommandMap.getInstance().registerCommand("mojoconsole", new PluginCommand());
-        Grasscutter.getLogger().info("[MojoConsole] enabled");
+        this.getLogger().info("[MojoConsole] enabled. Version: " + versionTag);
 
     }
 
     @Override
     public void onDisable() {
         CommandMap.getInstance().unregisterCommand("mojoconsole");
-        Grasscutter.getLogger().info("[MojoConsole] Mojoconsole Disabled");
+        this.getLogger().info("[MojoConsole] Mojoconsole Disabled");
     }
 
 }
