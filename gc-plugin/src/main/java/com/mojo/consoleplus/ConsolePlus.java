@@ -22,6 +22,7 @@ import com.mojo.consoleplus.config.MojoConfig;
 public class ConsolePlus extends Plugin{
     public static MojoConfig config = MojoConfig.loadConfig();
     public static String versionTag;
+    public static AuthHandler authHandler;
 
     @Override
     public void onLoad() {
@@ -58,7 +59,7 @@ public class ConsolePlus extends Plugin{
         Grasscutter.getHttpServer().addRouter(RequestHandler.class);
         CommandMap.getInstance().registerCommand("mojoconsole", new PluginCommand());
         this.getLogger().info("[MojoConsole] enabled. Version: " + versionTag);
-
+        authHandler = new AuthHandler();
     }
 
     @Override

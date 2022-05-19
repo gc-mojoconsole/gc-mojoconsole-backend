@@ -1,5 +1,8 @@
 package com.mojo.consoleplus;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -34,43 +37,61 @@ public final class RequestHandler implements Router {
 	public static void processRequest(Request req, Response res) throws IOException {
         RequestJson request = req.body(RequestJson.class);
         res.type("application/json");
-        if (request.k != null) {
+        Player player = null;
+        if (request.k != null) { // version 1 token
             Account account = DatabaseHelper.getAccountBySessionKey(request.k);
             Map<Integer, Player> playersMap = Grasscutter.getGameServer().getPlayers();
-            Player player = null;
             // String invokeResult = "";
-            MessageHandler resultCollector = new MessageHandler();
             if (account != null) {
                 for (int playerid: playersMap.keySet()) {
                     if (playersMap.get(playerid).getUid() == account.getPlayerUid()) {
                         player = playersMap.get(playerid);
                     }
                 }
-                if (player != null) {
-                    // player.setInvokeResult("[MojoConsole]");
-                    player.setMessageHandler(resultCollector); // hook the message
-                    switch (request.request){
-                        case "invoke":
-                            try{
-                                // TODO: Enable execut commands to third party
-                                CommandMap.getInstance().invoke(player, player, request.payload);
-                            } catch (Exception e) {
-                                res.json(new ResponseJson("error", 500, e.getStackTrace().toString()));
-                                break;
-                            }
-                        case "ping":
-                            // res.json(new ResponseJson("success", 200));
-                            res.json(new ResponseJson("success", 200, resultCollector.getMessage()));
-                            break;
-                        default:
-                            res.json(new ResponseJson("400 Bad Request", 400));
-                            break;
+            }
+        }
+
+        if (request.k2 != null) { // version 2 token
+            int uid; 
+            long expire;
+            String hashDigest;
+            uid = parseInt(request.k2.split(":")[0]);
+            expire = parseLong(request.k2.split(":")[1]);
+            hashDigest = request.k2.split(":")[2];
+            if (ConsolePlus.authHandler.auth(uid, expire, hashDigest)){
+                Map<Integer, Player> playersMap = Grasscutter.getGameServer().getPlayers();
+                for (int playerid: playersMap.keySet()) {
+                    if (playersMap.get(playerid).getUid() == uid) {
+                        player = playersMap.get(playerid);
                     }
-                    player.setMessageHandler(null);
-                    return;
                 }
             }
         }
+
+        if (player != null) {
+            MessageHandler resultCollector = new MessageHandler();
+            player.setMessageHandler(resultCollector); // hook the message
+            switch (request.request){
+                case "invoke":
+                    try{
+                        // TODO: Enable execut commands to third party
+                        CommandMap.getInstance().invoke(player, player, request.payload);
+                    } catch (Exception e) {
+                        res.json(new ResponseJson("error", 500, e.getStackTrace().toString()));
+                        break;
+                    }
+                case "ping":
+                    // res.json(new ResponseJson("success", 200));
+                    res.json(new ResponseJson("success", 200, resultCollector.getMessage()));
+                    break;
+                default:
+                    res.json(new ResponseJson("400 Bad Request", 400));
+                    break;
+            }
+            player.setMessageHandler(null);
+            return;
+        }
+
         res.json(new ResponseJson("403 Forbidden", 403));
     }
 }
