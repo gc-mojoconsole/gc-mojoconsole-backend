@@ -1,8 +1,10 @@
 package com.mojo.consoleplus.command;
 
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import emu.grasscutter.Grasscutter;
 import emu.grasscutter.command.Command;
@@ -21,25 +23,86 @@ public class PluginCommand implements CommandHandler {
         public String k2; // session key
         public String d; // mojo backend url
     }
+    public static class Ticket {
+        public Player sender;
+        public Player targetPlayer;
+        public long expire;
+        public Boolean api = false; // from api
+        public String key;
+
+        public Ticket(Player sender2, Player targetPlayer2, long l) {
+            sender = sender2;
+            targetPlayer = targetPlayer2;
+            expire = l;
+        }
+        public Ticket(Player targetPlayer, long expire, Boolean api) {
+            this.sender = null;
+            this.targetPlayer = targetPlayer;
+            this.expire = expire;
+            this.api = api;
+        }
+    }
+    public HashMap<String, Ticket> tickets = new HashMap<String, Ticket>();
+    public static PluginCommand instance;
+
+    public PluginCommand(){
+        instance = this;
+    }
+
     @Override
     public void execute(Player sender, Player targetPlayer, List<String> args) {
-        Mail mail = new Mail();
-        String authKey = ConsolePlus.authHandler.genKey(sender.getUid(), System.currentTimeMillis() / 1000 + ConsolePlus.config.mail.expireHour * 3600);
-        String link = getServerURL(authKey);
+        if (sender != targetPlayer){
+            String otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
+            while (tickets.containsKey(otp)){
+                otp = new DecimalFormat("000000").format(new Random().nextInt(999999));
+            }
+            CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessageThird.replace("{{OTP}}", otp));
+            flushTicket();
+            tickets.put(otp, new Ticket(sender, targetPlayer, System.currentTimeMillis()/ 1000 + 300));
+            return;
+        }
         String link_type = "webview";
-        Grasscutter.getLogger().info(link);
         if (args.size() > 0) {
             if (args.get(0).equals("o")){
                 link_type = "browser";
+            } else {
+                String otp = args.get(0);
+                Ticket resolved;
+                Boolean valid = false;
+                if (tickets.containsKey(otp)) {
+                    resolved = tickets.get(otp);
+                    if (sender == resolved.targetPlayer && resolved.expire > System.currentTimeMillis() / 1000){
+                        sender = resolved.sender;
+                        targetPlayer = resolved.targetPlayer;
+                        valid = true;
+                        if (resolved.api == false) {
+                            CommandHandler.sendMessage(targetPlayer, ConsolePlus.config.responseMessageSuccess);
+                            tickets.remove(otp);
+                        }
+                    }
+                }
+                if (!valid){
+                    CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessageError);
+                    return;
+                }
             }
         }
+        String authKey = ConsolePlus.authHandler.genKey(targetPlayer.getUid(), System.currentTimeMillis() / 1000 + ConsolePlus.config.mail.expireHour * 3600);
+        String link = getServerURL(authKey);
+        // Grasscutter.getLogger().info(link);
 
-        mail.mailContent.title = ConsolePlus.config.mail.title;
-        mail.mailContent.sender = ConsolePlus.config.mail.author;
-        mail.mailContent.content = ConsolePlus.config.mail.content.replace("{{ LINK }}", "<type=\""+ link_type + "\" text=\"Mojo Console\" href=\"" + link + "\"/>");
-        mail.expireTime = System.currentTimeMillis() / 1000 + 3600 * ConsolePlus.config.mail.expireHour;
-        sender.sendMail(mail);
-        CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessage);
+        if (sender != null) {
+            Mail mail = new Mail();
+            mail.mailContent.title = ConsolePlus.config.mail.title;
+            mail.mailContent.sender = ConsolePlus.config.mail.author;
+            mail.mailContent.content = ConsolePlus.config.mail.content.replace("{{ LINK }}", "<type=\""+ link_type + "\" text=\"Mojo Console\" href=\"" + link + "\"/>");
+            mail.expireTime = System.currentTimeMillis() / 1000 + 3600 * ConsolePlus.config.mail.expireHour;
+            sender.sendMail(mail);
+            CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessage);
+        } else {
+            tickets.get(args.get(0)).key = authKey;
+        }
+
     }
 
     private static String getServerURL(String sessionKey) {
@@ -68,5 +131,14 @@ public class PluginCommand implements CommandHandler {
         return "http" + (HTTP_ENCRYPTION.useEncryption ? "s" : "") + "://"
         + lr(HTTP_INFO.accessAddress, HTTP_INFO.bindAddress) + ":"
         + lr(HTTP_INFO.accessPort, HTTP_INFO.bindPort);
+    }
+
+    private void flushTicket()  {
+        Long curtime = System.currentTimeMillis() / 1000;
+        for (String otp : tickets.keySet()) {
+            if (curtime > tickets.get(otp).expire) {
+                tickets.remove(otp);
+            }
+        }
     }
 }

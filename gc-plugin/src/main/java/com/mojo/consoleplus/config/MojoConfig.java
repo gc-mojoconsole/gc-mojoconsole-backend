@@ -15,6 +15,9 @@ public class MojoConfig {
     public String CDNLink = "https://gc-mojoconsole.github.io/";
     public String interfacePath = "/mojoplus/console.html";
     public String responseMessage = "[MojoConsole] Link sent to your mailbox, check it!";
+    public String responseMessageThird = "[MojoConsole] You are trying to obtain link for third-party user, please ask him/her send \"/mojo {{OTP}}\" to server in-game";
+    public String responseMessageError = "[MojoConsole] Invalid argument.";
+    public String responseMessageSuccess = "[MojoConsole] Success!";
     
     static public class MailTemplate {
         public String title = "Mojo Console Link";
