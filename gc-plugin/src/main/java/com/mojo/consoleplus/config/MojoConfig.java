@@ -21,6 +21,7 @@ public class MojoConfig {
         public String author = "Mojo Console";
         public String content = "Here is your mojo console link: {{ LINK }}\n" +
         "Note that the link will <b>expire</b> in some time, you may retrieve a new one after that.";
+        public int expireHour = 3;
     };
 
     public MailTemplate mail = new MailTemplate();
@@ -43,7 +44,9 @@ public class MojoConfig {
 
         try{
             String s = Files.readString(configFile.toPath(), StandardCharsets.UTF_8);
-            return gson.fromJson(s, MojoConfig.class);     
+            MojoConfig config = gson.fromJson(s, MojoConfig.class);     
+            config.saveConfig();
+            return config;
         } catch (Exception e) {
             MojoConfig config = new MojoConfig();
             config.saveConfig();
