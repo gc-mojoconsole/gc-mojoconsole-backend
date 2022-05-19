@@ -33,6 +33,7 @@ public class PluginCommand implements CommandHandler {
         mail.mailContent.title = ConsolePlus.config.mail.title;
         mail.mailContent.sender = ConsolePlus.config.mail.author;
         mail.mailContent.content = ConsolePlus.config.mail.content.replace("{{ LINK }}", "<type=\""+ link_type + "\" text=\"Mojo Console\" href=\"" + link + "\"/>");
+        mail.expireTime = System.currentTimeMillis() / 1000 + 3600;
         targetPlayer.sendMail(mail);
         CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessage);
     }
