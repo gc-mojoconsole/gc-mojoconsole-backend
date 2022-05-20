@@ -32,7 +32,7 @@ MojoConsolePlus(MCP)是一个[Grasscutter](https://github.com/Grasscutters/Grass
 2. 找到grasscutter的安装位置，复制 ``grasscutter`` 的jar文件到刚刚新创建的 ``gc-mojoconsole-backend/gc-plugin/lib`` 文件夹。
 3. 进入 ``gc-mojoconsole-plus`` 文件夹，执行``gradlew build`` (cmd) **或者** ``./gradlew build`` (Powershell, Linux & Mac)来进行编译。
 4. 如果编译成功， 你可以找到``gc-plugin`` 文件夹下的 ``mojoconsole.jar``文件.
-5. 讲编译好的 ``mojoconsole.jar`` 文件复制到``Grasscutter`` 安装位置下的 ``plugins`` 文件夹。 
+5. 将编译好的 ``mojoconsole.jar`` 文件复制到``Grasscutter`` 安装位置下的 ``plugins`` 文件夹。 
 6. 启动grasscutter。
 
 ...之后请看使用说明...
