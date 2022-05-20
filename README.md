@@ -149,4 +149,5 @@ function sendCommand(payload){
 By SpikeHD: https://github.com/SpikeHD/MojoFrontend (under development)
 CDN hosted frontend：https://github.com/gc-mojoconsole/gc-mojoconsole.github.io
 
+Desktop version on Windows https://github.com/SwetyCore/MojoDesktop  
 ...You can develop your own frontend and make PR to put yours here...
