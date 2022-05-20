@@ -152,4 +152,6 @@ function sendCommand(payload){
 By SpikeHD: https://github.com/SpikeHD/MojoFrontend (under development)
 CDN前端：https://github.com/gc-mojoconsole/gc-mojoconsole.github.io
 
+Win 桌面版本 https://github.com/SwetyCore/MojoDesktop
+
 ...你可以字行开发前端，然后发起PR来让你的前端显示在这里...
