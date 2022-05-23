@@ -19,7 +19,7 @@ plugins {
 sourceCompatibility = 17
 targetCompatibility = 17
 
-def version_tag = "dev-1.1.2"
+def version_tag = "dev-1.2.0"
 
 repositories {
     mavenCentral()
