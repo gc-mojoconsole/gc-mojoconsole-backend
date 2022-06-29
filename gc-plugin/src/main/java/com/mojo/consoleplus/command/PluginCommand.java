@@ -14,6 +14,7 @@ import static emu.grasscutter.Configuration.*;
 
 import com.mojo.consoleplus.ConsolePlus;
 import com.google.gson.Gson;
+import emu.grasscutter.BuildConfig;
 
 @Command(label = "mojoconsole", usage = "mojoconsole", description = "Send Mojoconsole link via mail (by default it's in-game webview, but you may use argument `o` for popping out external browser)", aliases = {
         "mojo" }, permission = "mojo.console")
@@ -21,6 +22,7 @@ public class PluginCommand implements CommandHandler {
     static class HashParams{
         public String k2; // session key
         public String d; // mojo backend url
+        public String gcv;
     }
     public static class Ticket {
         public Player sender;
@@ -110,6 +112,7 @@ public class PluginCommand implements CommandHandler {
             HashParams hp = new HashParams();
             hp.k2 = sessionKey;
             hp.d = getMojoBackendURL();
+            hp.gcv = BuildConfig.VERSION;
             try {
                 sessionKey = URLEncoder.encode(sessionKey, "utf-8");
             } catch (Exception e) {
@@ -119,10 +122,10 @@ public class PluginCommand implements CommandHandler {
                 return ConsolePlus.config.CDNLink + "#" + URLEncoder.encode(gson.toJson(hp), "utf-8");
             } catch (Exception e){
                 e.printStackTrace();
-                return ConsolePlus.config.CDNLink +  "?k2=" + sessionKey;
+                return ConsolePlus.config.CDNLink +  "?k2=" + sessionKey + "&gcv=" + BuildConfig.VERSION;
             }
         } else {
-            return getMojoBackendURL() + ConsolePlus.config.interfacePath + "?k2=" + sessionKey;
+            return getMojoBackendURL() + ConsolePlus.config.interfacePath + "?k2=" + sessionKey + "&gcv=" + BuildConfig.VERSION;
         }
     }
 
