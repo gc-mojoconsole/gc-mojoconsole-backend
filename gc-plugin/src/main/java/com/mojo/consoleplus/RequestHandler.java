@@ -43,18 +43,6 @@ public final class RequestHandler implements Router {
         RequestJson request = req.body(RequestJson.class);
         res.type("application/json");
         Player player = null;
-        if (request.k != null) { // version 1 token
-            Account account = DatabaseHelper.getAccountBySessionKey(request.k);
-            Map<Integer, Player> playersMap = Grasscutter.getGameServer().getPlayers();
-            // String invokeResult = "";
-            if (account != null) {
-                for (int playerid: playersMap.keySet()) {
-                    if (playersMap.get(playerid).getUid() == account.getPlayerUid()) {
-                        player = playersMap.get(playerid);
-                    }
-                }
-            }
-        }
 
         if (request.k2 != null) { // version 2 token
             int uid; 

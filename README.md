@@ -4,6 +4,11 @@ EN|[中文](./README-zh.md)
 
 MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscutter) plugin (Apart from 4Benj's GCGM plugin) and it's goal is to implement fully in-game webwiew based .
 
+| Grasscutter version | MojoConsole version |
+| ------------------- | ------------------- |
+| 1.2.1-dev           | 1.2.0-dev           |
+| 1.2.2-dev           | 1.3.0-dev           |
+
 ## Currently Features: 
 - [x] Send console link in game
 - [x] Do what players can do in the in-game chat based console
