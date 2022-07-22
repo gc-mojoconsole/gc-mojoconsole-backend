@@ -18,6 +18,9 @@ public class MojoConfig {
     public String responseMessageThird = "[MojoConsole] You are trying to obtain link for third-party user, please ask him/her send \"/mojo {{OTP}}\" to server in-game";
     public String responseMessageError = "[MojoConsole] Invalid argument.";
     public String responseMessageSuccess = "[MojoConsole] Success!";
+    public String socketToken = "";
+    public int socketPort = 7812;
+    public String socketHost = "127.0.0.1";
     
     static public class MailTemplate {
         public String title = "Mojo Console Link";

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.mojo.consoleplus.socket.SocketClient;
+import com.mojo.consoleplus.socket.packet.OtpPacket;
 import emu.grasscutter.command.Command;
 import emu.grasscutter.command.CommandHandler;
 import emu.grasscutter.game.mail.Mail;
@@ -59,7 +61,9 @@ public class PluginCommand implements CommandHandler {
             }
             CommandHandler.sendMessage(sender, ConsolePlus.config.responseMessageThird.replace("{{OTP}}", otp));
             flushTicket();
-            tickets.put(otp, new Ticket(sender, targetPlayer, System.currentTimeMillis()/ 1000 + 300));
+            var time = System.currentTimeMillis()/ 1000 + 300;
+            SocketClient.sendPacket(new OtpPacket(targetPlayer.getUid(), otp, time, false));
+            tickets.put(otp, new Ticket(sender, targetPlayer, time));
             return;
         }
         String link_type = "webview";
@@ -140,6 +144,7 @@ public class PluginCommand implements CommandHandler {
         for (String otp : tickets.keySet()) {
             if (curtime > tickets.get(otp).expire) {
                 tickets.remove(otp);
+                SocketClient.sendPacket(new OtpPacket(otp));
             }
         }
     }
