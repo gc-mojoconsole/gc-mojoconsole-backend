@@ -130,7 +130,7 @@ public class SocketClient {
                                     var command = player.data;
                                     var playerData = ConsolePlus.getInstance().getServer().getPlayerByUid(player.uid);
                                     if (playerData == null) {
-                                        sendPacket(new HttpPacket(404, "Player not found."), packet.packetID);
+                                        sendPacket(new HttpPacket(404, "[Mojo Console] Player not found."), packet.packetID);
                                         return;
                                     }
                                     // Player MessageHandler do not support concurrency
@@ -140,9 +140,9 @@ public class SocketClient {
                                             var resultCollector = new MessageHandler();
                                             playerData.setMessageHandler(resultCollector);
                                             CommandMap.getInstance().invoke(playerData, playerData, command);
-                                            sendPacket(new HttpPacket(200, resultCollector.getMessage()), packet.packetID);
+                                            sendPacket(new HttpPacket(200, "success", resultCollector.getMessage()), packet.packetID);
                                         } catch (Exception e) {
-                                            mLogger.warn("Run command failed.", e);
+                                            mLogger.warn("[Mojo Console] Run command failed.", e);
                                             sendPacket(new HttpPacket(500, "error", e.getLocalizedMessage()), packet.packetID);
                                         } finally {
                                             playerData.setMessageHandler(null);
