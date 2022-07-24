@@ -12,14 +12,20 @@ import emu.grasscutter.command.Command;
 import emu.grasscutter.command.CommandHandler;
 import emu.grasscutter.game.mail.Mail;
 import emu.grasscutter.game.player.Player;
-import static emu.grasscutter.Configuration.*;
+import static emu.grasscutter.config.Configuration.*;
 
 import com.mojo.consoleplus.ConsolePlus;
 import com.google.gson.Gson;
 import emu.grasscutter.BuildConfig;
 
-@Command(label = "mojoconsole", usage = "mojoconsole", description = "Send Mojoconsole link via mail (by default it's in-game webview, but you may use argument `o` for popping out external browser)", aliases = {
-        "mojo" }, permission = "mojo.console")
+@Command(label = "mojoconsole", 
+    usage = {
+        "",
+        "o"
+    }, 
+    aliases = {"mojo" },
+    permission = "mojo.console"
+    )
 public class PluginCommand implements CommandHandler {
     static class HashParams{
         public String k2; // session key
