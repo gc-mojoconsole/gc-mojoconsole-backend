@@ -14,8 +14,8 @@ import com.mojo.consoleplus.command.PluginCommand;
 
 import io.javalin.http.staticfiles.Location;
 import emu.grasscutter.plugin.PluginConfig;
-import static emu.grasscutter.Configuration.PLUGIN;
-import static emu.grasscutter.Configuration.HTTP_POLICIES;
+import static emu.grasscutter.config.Configuration.PLUGIN;
+import static emu.grasscutter.config.Configuration.HTTP_POLICIES;
 
 import com.mojo.consoleplus.config.MojoConfig;
 

@@ -6,8 +6,9 @@ MojoConsolePlus(MCP) is a [Grasscutter](https://github.com/Grasscutters/Grasscut
 
 | Grasscutter version | MojoConsole version |
 | ------------------- | ------------------- |
-| 1.2.1-dev           | 1.2.0-dev           |
-| 1.2.2-dev           | 1.3.0-dev           |
+| 1.2.1-dev           | [1.2.0-dev](https://github.com/gc-mojoconsole/gc-mojoconsole-backend/releases/tag/dev-1.2.0)           |
+| 1.2.2-dev           | [1.3.0-dev](https://github.com/gc-mojoconsole/gc-mojoconsole-backend/releases/tag/dev-1.3.0)           |
+| 1.2.3-dev           | [1.4.0-dev](https://github.com/gc-mojoconsole/gc-mojoconsole-backend/releases/tag/dev-1.4.0)           |
 
 ## Currently Features: 
 - [x] Send console link in game
