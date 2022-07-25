@@ -31,11 +31,23 @@ public class SocketClient {
 
     public static ReceiveThread receiveThread;
 
+    public static void connectServer(Logger logger) {
+        mLogger = logger;
+        connectServer();
+    }
+
     // 连接服务器
     public static void connectServer() {
         if (connect) return;
+        if (clientThread != null) {
+            mLogger.warn("[Mojo Console] Retry connecting to the server after 15 seconds");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
         MojoConfig config = ConsolePlus.config;
-        mLogger = ConsolePlus.logger;
         clientThread = new ClientThread(config.socketHost, config.socketPort);
 
         if (timer != null) {
@@ -51,7 +63,6 @@ public class SocketClient {
         var p = SocketUtils.getPacket(packet);
         if (!clientThread.sendPacket(p)) {
             mLogger.warn("[Mojo Console] Send packet to server failed");
-            mLogger.info("[Mojo Console] Reconnect to server");
             connect = false;
             connectServer();
             return false;
@@ -63,7 +74,6 @@ public class SocketClient {
     public static boolean sendPacket(BasePacket packet, String packetID) {
         if (!clientThread.sendPacket(SocketUtils.getPacketAndPackID(packet, packetID))) {
             mLogger.warn("[Mojo Console] Send packet to server failed");
-            mLogger.info("[Mojo Console] Reconnect to server");
             connect = false;
             connectServer();
             return false;
@@ -128,7 +138,7 @@ public class SocketClient {
                                 // 运行命令
                                 case RunCommand -> {
                                     var command = player.data;
-                                    var playerData = ConsolePlus.getInstance().getServer().getPlayerByUid(player.uid);
+                                    var playerData = Grasscutter.getGameServer().getPlayerByUid(player.uid);
                                     if (playerData == null) {
                                         sendPacket(new HttpPacket(404, "[Mojo Console] Player not found."), packet.packetID);
                                         return;
@@ -151,7 +161,7 @@ public class SocketClient {
                                 }
                                 // 发送信息
                                 case DropMessage -> {
-                                    var playerData = ConsolePlus.getInstance().getServer().getPlayerByUid(player.uid);
+                                    var playerData = Grasscutter.getGameServer().getPlayerByUid(player.uid);
                                     if (playerData == null) {
                                         return;
                                     }
@@ -218,12 +228,6 @@ public class SocketClient {
             } catch (IOException e) {
                 connect = false;
                 mLogger.warn("[Mojo Console] Connect to server failed: " + ip + ":" + port);
-                mLogger.warn("[Mojo Console] Retry connecting to the server after 15 seconds");
-                try {
-                    Thread.sleep(15000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
                 connectServer();
             }
         }

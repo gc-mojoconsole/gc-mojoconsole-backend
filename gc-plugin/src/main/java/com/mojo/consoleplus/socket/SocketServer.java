@@ -24,10 +24,10 @@ public class SocketServer {
     private static final HashMap<String, Integer> clientTimeout = new HashMap<>();
     private static Logger mLogger;
 
-    public static void startServer() {
+    public static void startServer(Logger logger) {
+        mLogger = logger;
         try {
             int port = ConsolePlus.config.socketPort;
-            mLogger = ConsolePlus.logger;
             new Timer().schedule(new SocketClientCheck(), 500);
             new WaitClientConnect(port);
         } catch (Throwable e) {
@@ -38,7 +38,7 @@ public class SocketServer {
     // 向全部客户端发送数据
     public static boolean sendAllPacket(BasePacket packet) {
         var p = SocketUtils.getPacket(packet);
-        HashMap<String, ClientThread>  old = (HashMap<String, ClientThread>) clientList.clone();
+        HashMap<String, ClientThread> old = (HashMap<String, ClientThread>) clientList.clone();
         for (var client : old.entrySet()) {
             if (!client.getValue().sendPacket(p)) {
                 mLogger.warn("[Mojo Console] Send packet to client {} failed", client.getKey());
