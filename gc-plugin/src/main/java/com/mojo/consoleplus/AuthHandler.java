@@ -17,6 +17,14 @@ public class AuthHandler {
         signatureStub = stub;
     }
 
+    public String getSignature() {
+        return signatureStub;
+    }
+
+    public void setSignature(String signature) {
+        signatureStub = signature;
+    }
+
     public Boolean auth(int uid, long expire, String dg) {
         return digestUid(uid+":"+expire).equals(dg);
     }
