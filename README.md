@@ -157,3 +157,12 @@ CDN hosted frontend：https://github.com/gc-mojoconsole/gc-mojoconsole.github.io
 
 Desktop version on Windows https://github.com/SwetyCore/MojoDesktop  
 ...You can develop your own frontend and make PR to put yours here...
+
+
+## Contributors
+
+Special thanks to the following users contributed to this project.
+
+<a href="https://github.com/gc-mojoconsole/gc-mojoconsole-backend/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=gc-mojoconsole/gc-mojoconsole-backend" />
+</a>

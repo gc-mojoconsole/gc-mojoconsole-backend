@@ -155,3 +155,12 @@ CDN前端：https://github.com/gc-mojoconsole/gc-mojoconsole.github.io
 Win 桌面版本 https://github.com/SwetyCore/MojoDesktop
 
 ...你可以自行开发前端，然后发起PR来让你的前端显示在这里...
+
+
+## 贡献者
+
+感谢以下开发者对本项目的贡献！
+
+<a href="https://github.com/gc-mojoconsole/gc-mojoconsole-backend/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=gc-mojoconsole/gc-mojoconsole-backend" />
+</a>
