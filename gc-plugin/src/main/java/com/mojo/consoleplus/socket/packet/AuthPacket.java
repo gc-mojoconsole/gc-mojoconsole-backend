@@ -1,6 +1,8 @@
 package com.mojo.consoleplus.socket.packet;
 
-import emu.grasscutter.Grasscutter;
+import com.google.gson.GsonBuilder;
+
+import static com.mojo.consoleplus.ConsolePlus.gson;
 
 public class AuthPacket extends BasePacket {
     public String token;
@@ -11,7 +13,7 @@ public class AuthPacket extends BasePacket {
 
     @Override
     public String getPacket() {
-        return Grasscutter.getGsonFactory().toJson(this);
+        return gson.toJson(this);
     }
 
     @Override

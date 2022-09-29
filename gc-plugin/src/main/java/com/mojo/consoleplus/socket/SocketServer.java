@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.mojo.consoleplus.ConsolePlus.gson;
+
 // Socket 服务器
 public class SocketServer {
     // 客户端超时时间
@@ -149,9 +151,9 @@ public class SocketServer {
             while (true) {
                 try {
                     String data = SocketUtils.readString(is);
-                    Packet packet = Grasscutter.getGsonFactory().fromJson(data, Packet.class);
+                    Packet packet = gson.fromJson(data, Packet.class);
                     if (packet.type == PacketEnum.AuthPacket) {
-                        AuthPacket authPacket = Grasscutter.getGsonFactory().fromJson(packet.data, AuthPacket.class);
+                        AuthPacket authPacket = gson.fromJson(packet.data, AuthPacket.class);
                         if (authPacket.token.equals(token)) {
                             mLogger.info("[Mojo Console] Client {} auth success.", address);
                             auth = true;
@@ -172,12 +174,12 @@ public class SocketServer {
                     switch (packet.type) {
                         // 缓存玩家列表
                         case PlayerList -> {
-                            PlayerList playerList = Grasscutter.getGsonFactory().fromJson(packet.data, PlayerList.class);
+                            PlayerList playerList = gson.fromJson(packet.data, PlayerList.class);
                             SocketData.playerList.put(address, playerList);
                         }
                         // Http信息返回
                         case HttpPacket -> {
-                            HttpPacket httpPacket = Grasscutter.getGsonFactory().fromJson(packet.data, HttpPacket.class);
+                            HttpPacket httpPacket = gson.fromJson(packet.data, HttpPacket.class);
                             var socketWait = socketDataWaitList.get(packet.packetID);
                             if (socketWait == null) {
                                 mLogger.error("[Mojo Console] HttpPacket: {} not found", packet.packetID);
@@ -187,7 +189,7 @@ public class SocketServer {
                             socketDataWaitList.remove(packet.packetID);
                         }
                         case OtpPacket -> {
-                            OtpPacket otpPacket = Grasscutter.getGsonFactory().fromJson(packet.data, OtpPacket.class);
+                            OtpPacket otpPacket = gson.fromJson(packet.data, OtpPacket.class);
                             if (otpPacket.remove) {
                                 SocketData.tickets.remove(otpPacket.otp);
                             } else {

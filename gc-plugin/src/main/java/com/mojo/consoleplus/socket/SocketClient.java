@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.mojo.consoleplus.ConsolePlus.gson;
+
 // Socket 客户端
 public class SocketClient {
     public static ClientThread clientThread;
@@ -129,11 +131,11 @@ public class SocketClient {
                 try {
                     if (exit) return;
                     String data = SocketUtils.readString(is);
-                    Packet packet = Grasscutter.getGsonFactory().fromJson(data, Packet.class);
+                    Packet packet = gson.fromJson(data, Packet.class);
                     switch (packet.type) {
                         // 玩家类
                         case Player:
-                            var player = Grasscutter.getGsonFactory().fromJson(packet.data, Player.class);
+                            var player = gson.fromJson(packet.data, Player.class);
                             switch (player.type) {
                                 // 运行命令
                                 case RunCommand -> {
@@ -170,10 +172,10 @@ public class SocketClient {
                             }
                             break;
                         case OtpPacket:
-                            var otpPacket = Grasscutter.getGsonFactory().fromJson(packet.data, OtpPacket.class);
+                            var otpPacket = gson.fromJson(packet.data, OtpPacket.class);
                             PluginCommand.getInstance().tickets.put(otpPacket.otp, new PluginCommand.Ticket(Grasscutter.getGameServer().getPlayerByUid(otpPacket.uid), otpPacket.expire, otpPacket.api));
                         case Signature:
-                            var signaturePacket = Grasscutter.getGsonFactory().fromJson(packet.data, SignaturePacket.class);
+                            var signaturePacket = gson.fromJson(packet.data, SignaturePacket.class);
                             ConsolePlus.authHandler.setSignature(signaturePacket.signature);
                             break;
                     }

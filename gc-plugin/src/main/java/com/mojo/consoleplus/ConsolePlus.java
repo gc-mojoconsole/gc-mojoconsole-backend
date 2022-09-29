@@ -1,6 +1,7 @@
 package com.mojo.consoleplus;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojo.consoleplus.command.PluginCommand;
 import com.mojo.consoleplus.config.MojoConfig;
 import com.mojo.consoleplus.socket.SocketClient;
@@ -27,6 +28,7 @@ public class ConsolePlus extends Plugin {
     public static MojoConfig config = MojoConfig.loadConfig();
     public static String versionTag;
     public static AuthHandler authHandler;
+    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
     public void onLoad() {
@@ -52,7 +54,11 @@ public class ConsolePlus extends Plugin {
             folder.mkdirs();
         }
         if (!config.UseCDN) {
-            Grasscutter.getHttpServer().getHandle().config.addStaticFiles("/mojoplus", folder_name, Location.EXTERNAL);
+            Grasscutter.getHttpServer().getHandle()._conf.addStaticFiles(staticFileConfig -> {
+                staticFileConfig.hostedPath = "/mojoplus";
+                staticFileConfig.directory = folder_name;
+                staticFileConfig.location = Location.EXTERNAL;
+            });
         } else {
             if (!HTTP_POLICIES.cors.enabled) {
                 Grasscutter.getLogger().error("[MojoConsole] You enabled the useCDN option, in this option, you have to configure Grasscutter accept CORS request. See `config.json`->`server`->`policies`->`cors`.");
