@@ -5,6 +5,8 @@ import com.mojo.consoleplus.socket.packet.BasePacket;
 import com.mojo.consoleplus.socket.packet.PacketEnum;
 import emu.grasscutter.Grasscutter;
 
+import static com.mojo.consoleplus.ConsolePlus.gson;
+
 // 玩家操作类
 public class Player extends BasePacket {
     public PlayerEnum type;
@@ -13,7 +15,7 @@ public class Player extends BasePacket {
 
     @Override
     public String getPacket() {
-        return Grasscutter.getGsonFactory().toJson(this);
+        return gson.toJson(this);
     }
 
     @Override
