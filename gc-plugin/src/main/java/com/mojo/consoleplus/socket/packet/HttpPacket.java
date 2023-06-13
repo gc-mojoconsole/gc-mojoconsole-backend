@@ -1,6 +1,7 @@
 package com.mojo.consoleplus.socket.packet;
 
 import emu.grasscutter.Grasscutter;
+import emu.grasscutter.utils.JsonUtils;
 
 // http返回数据
 public class HttpPacket extends BasePacket {
@@ -21,7 +22,7 @@ public class HttpPacket extends BasePacket {
 
     @Override
     public String getPacket() {
-        return Grasscutter.getGsonFactory().toJson(this);
+        return JsonUtils.encode(this);
     }
 
     @Override

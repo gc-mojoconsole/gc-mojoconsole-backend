@@ -8,7 +8,7 @@ import com.mojo.consoleplus.socket.packet.player.Player;
 import com.mojo.consoleplus.socket.packet.player.PlayerList;
 import emu.grasscutter.Grasscutter;
 import emu.grasscutter.command.CommandMap;
-import emu.grasscutter.utils.MessageHandler;
+// import emu.grasscutter.utils.MessageHandler;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -149,15 +149,15 @@ public class SocketClient {
                                     //noinspection SynchronizationOnLocalVariableOrMethodParameter
                                     synchronized (playerData) {
                                         try {
-                                            var resultCollector = new MessageHandler();
-                                            playerData.setMessageHandler(resultCollector);
+                                            // var resultCollector = new MessageHandler();
+                                            // playerData.setMessageHandler(resultCollector);
                                             CommandMap.getInstance().invoke(playerData, playerData, command);
-                                            sendPacket(new HttpPacket(200, "success", resultCollector.getMessage()), packet.packetID);
+                                            sendPacket(new HttpPacket(200, "success", "resultCollector.getMessage()"), packet.packetID);
                                         } catch (Exception e) {
                                             mLogger.warn("[Mojo Console] Run command failed.", e);
                                             sendPacket(new HttpPacket(500, "error", e.getLocalizedMessage()), packet.packetID);
                                         } finally {
-                                            playerData.setMessageHandler(null);
+                                            // playerData.setMessageHandler(null);
                                         }
                                     }
                                 }

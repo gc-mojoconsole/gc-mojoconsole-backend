@@ -1,6 +1,7 @@
 package com.mojo.consoleplus.socket.packet;
 
 import emu.grasscutter.Grasscutter;
+import emu.grasscutter.utils.JsonUtils;
 
 public class SignaturePacket extends BasePacket {
     public String signature;
@@ -11,7 +12,7 @@ public class SignaturePacket extends BasePacket {
 
     @Override
     public String getPacket() {
-        return Grasscutter.getGsonFactory().toJson(this);
+        return JsonUtils.encode(this);
     }
 
     @Override

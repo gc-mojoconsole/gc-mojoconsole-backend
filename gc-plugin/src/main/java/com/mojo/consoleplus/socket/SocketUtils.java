@@ -4,6 +4,8 @@ import com.mojo.consoleplus.ConsolePlus;
 import com.mojo.consoleplus.socket.packet.BasePacket;
 import com.mojo.consoleplus.socket.packet.Packet;
 import emu.grasscutter.Grasscutter;
+import emu.grasscutter.utils.JsonUtils;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +27,7 @@ public class SocketUtils {
         packet.type = bPacket.getType();
         packet.data = bPacket.getPacket();
         packet.packetID = UUID.randomUUID().toString();
-        return Grasscutter.getGsonFactory().toJson(packet);
+        return JsonUtils.encode(packet);
     }
 
     /**
@@ -41,7 +43,7 @@ public class SocketUtils {
 
         List<String> list = new ArrayList<>();
         list.add(packet.packetID);
-        list.add(Grasscutter.getGsonFactory().toJson(packet));
+        list.add(JsonUtils.encode(packet));
         return list;
     }
 
@@ -56,7 +58,7 @@ public class SocketUtils {
         packet.type = bPacket.getType();
         packet.data = bPacket.getPacket();
         packet.packetID = packetID;
-        return Grasscutter.getGsonFactory().toJson(packet);
+        return JsonUtils.encode(packet);
     }
 
     /**
