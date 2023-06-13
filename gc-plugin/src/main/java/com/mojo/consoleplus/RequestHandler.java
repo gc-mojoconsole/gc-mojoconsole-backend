@@ -9,7 +9,6 @@ import emu.grasscutter.Grasscutter;
 import emu.grasscutter.command.CommandMap;
 import emu.grasscutter.game.player.Player;
 import emu.grasscutter.server.http.Router;
-import emu.grasscutter.utils.MessageHandler;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -53,26 +52,30 @@ public final class RequestHandler implements Router {
         }
 
         if (player != null) {
-            MessageHandler resultCollector = new MessageHandler();
-            player.setMessageHandler(resultCollector); // hook the message
-            switch (request.request){
-                case "invoke":
-                    try{
-                        // TODO: Enable execut commands to third party
-                        CommandMap.getInstance().invoke(player, player, request.payload);
-                    } catch (Exception e) {
-                        context.json(new ResponseJson("error", 500, e.getStackTrace().toString()));
+            // MessageHandler resultCollector = new MessageHandler();
+            // player.setMessageHandler(resultCollector); // hook the message
+            var handler = EventListeners.getPlayerMessageHandler(player.getUid());
+            synchronized (handler) {
+                switch (request.request){
+                    case "invoke":
+                        try{
+                            // TODO: Enable execut commands to third party
+                            handler.setLength(0);
+                            CommandMap.getInstance().invoke(player, player, request.payload);
+                        } catch (Exception e) {
+                            context.json(new ResponseJson("error", 500, e.getStackTrace().toString()));
+                            break;
+                        }
+                        // no break here
+                    case "ping":
+                        // res.json(new ResponseJson("success", 200));
+                        context.json(new ResponseJson("success", 200, handler.toString()));
                         break;
-                    }
-                case "ping":
-                    // res.json(new ResponseJson("success", 200));
-                    context.json(new ResponseJson("success", 200, resultCollector.getMessage()));
-                    break;
-                default:
-                    context.json(new ResponseJson("400 Bad Request", 400));
-                    break;
+                    default:
+                        context.json(new ResponseJson("400 Bad Request", 400));
+                        break;
+                }
             }
-            player.setMessageHandler(null);
             return;
         }
 

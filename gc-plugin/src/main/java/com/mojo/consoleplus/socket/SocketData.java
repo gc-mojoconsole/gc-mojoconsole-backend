@@ -7,7 +7,7 @@ import org.luaj.vm2.ast.Str;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-// Socket 数据保存
+// Socket data storage
 public class SocketData {
     public static HashMap<String, PlayerList> playerList = new HashMap<>();
 

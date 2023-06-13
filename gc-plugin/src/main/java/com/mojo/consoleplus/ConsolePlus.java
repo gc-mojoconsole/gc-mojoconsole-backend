@@ -14,6 +14,7 @@ import emu.grasscutter.server.event.EventHandler;
 import emu.grasscutter.server.event.HandlerPriority;
 import emu.grasscutter.server.event.player.PlayerJoinEvent;
 import emu.grasscutter.server.event.player.PlayerQuitEvent;
+import emu.grasscutter.server.event.game.ReceiveCommandFeedbackEvent;
 import io.javalin.http.staticfiles.Location;
 
 import java.io.BufferedReader;
@@ -54,10 +55,10 @@ public class ConsolePlus extends Plugin {
             folder.mkdirs();
         }
         if (!config.UseCDN) {
-            Grasscutter.getHttpServer().getHandle()._conf.addStaticFiles(staticFileConfig -> {
-                staticFileConfig.hostedPath = "/mojoplus";
-                staticFileConfig.directory = folder_name;
-                staticFileConfig.location = Location.EXTERNAL;
+            Grasscutter.getHttpServer().getHandle().cfg.staticFiles.add(staticFiles -> {
+                staticFiles.hostedPath = "/mojoplus";
+                staticFiles.directory = folder_name;
+                staticFiles.location = Location.EXTERNAL;
             });
         } else {
             if (!HTTP_POLICIES.cors.enabled) {
@@ -84,6 +85,13 @@ public class ConsolePlus extends Plugin {
         } else {
             Grasscutter.getHttpServer().addRouter(RequestHandler.class);
         }
+
+        // Thanks to gc-opencommand-plugin project
+        new EventHandler<>(ReceiveCommandFeedbackEvent.class)
+        .priority(HandlerPriority.HIGH)
+        .listener(EventListeners::onCommandResponse)
+        .register(this);
+
         CommandMap.getInstance().registerCommand("mojoconsole", new PluginCommand());
         this.getLogger().info("[MojoConsole] enabled. Version: " + versionTag);
     }
